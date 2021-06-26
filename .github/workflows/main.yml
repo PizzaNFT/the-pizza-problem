@@ -13,6 +13,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - name: Test Contract
+      - name: Setup NodeJs
         uses: actions/setup-node@v2.1.5
+        with:
+          node-version: '16.x'
+          
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Tests on contract
         run: cd contract && npx hardhat test
