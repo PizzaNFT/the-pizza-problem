@@ -6,12 +6,12 @@ import { expect } from "chai";
 const pizzaObj = 
   {
   "dough": "thin",
-  "flavour": [
-    "calabresa",
-    "frango"
+  "topping": [
+    "pepperoni",
+    "margherita"
   ],
-  "extra": [
-    "cebola",
+  "extras": [
+    "onions",
     "bacon"
   ]
 };
