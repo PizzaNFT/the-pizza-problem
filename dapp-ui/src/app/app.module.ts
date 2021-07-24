@@ -20,8 +20,10 @@ import { VoteComponent } from './voting/vote/vote.component';
 import { AppRoutingModule } from './app-routing.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CreateAccountComponent } from './account/create-account/create-account.component';
-
-
+import { BuyPizzaComponent } from './pizza/buy-pizza/buy-pizza.component';
+import { GlobalService } from './services/global.service';
+import { PizzaTokenService } from './services/pizzaToken.service';
+import { WalletService } from './services/wallet.service';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,8 @@ import { CreateAccountComponent } from './account/create-account/create-account.
     SidenavComponent,
     CreateVotingComponent,
     VoteComponent,
-    CreateAccountComponent
+    CreateAccountComponent,
+    BuyPizzaComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +50,11 @@ import { CreateAccountComponent } from './account/create-account/create-account.
     MatInputModule,
     MatSelectModule
   ],
-  providers: [],
+  providers: [
+    GlobalService,
+    WalletService,
+    PizzaTokenService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

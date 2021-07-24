@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CreateVotingComponent implements OnInit {
 
+  firstPizza: string = ""
+  secondPizza: string = ""
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  createVoting() {
+    console.log("")
   }
 
 }

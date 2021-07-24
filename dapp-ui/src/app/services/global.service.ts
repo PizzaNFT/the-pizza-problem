@@ -23,7 +23,8 @@ export class GlobalService {
     return this.wallet
   }
 
-  getSigner() {
+  getSigner(wallet: ethers.Wallet) {
+    this.signer = new ethers.Wallet(wallet.privateKey, this.provider)
     return this.signer
   }
 

@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="col-md-12">
+    <h1>Buy Pizza</h1>
+
+    <div class="row">
+      <mat-form-field class="mx-auto w-50" appearance="outline">
+        <mat-label>Dough</mat-label>
+        <input type="text" matInput [(ngModel)]="dough">
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field class="mx-auto w-50" appearance="outline">
+        <mat-label>Topping</mat-label>
+        <input type="text" matInput [(ngModel)]="topping">
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field class="mx-auto w-50" appearance="outline">
+        <mat-label>Extra</mat-label>
+        <input type="text" matInput [(ngModel)]="extra">
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <button class="mx-auto w-50" mat-raised-button color="primary" (click)="buyPizza()">Buy Pizza</button>
+    </div>
+  </div>
+</div>
