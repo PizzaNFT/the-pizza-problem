@@ -1,5 +1,5 @@
 
-name: Test commit
+name: PullRequest
 on:
   push:
     branches: [ master ]
