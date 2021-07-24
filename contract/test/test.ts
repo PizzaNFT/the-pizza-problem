@@ -15,6 +15,8 @@ const pizzaObj =
   ]
 };
 
+const PROPOSALS = ["batata","queijo","bacon"]
+
 describe("PizzaNFT", function () {
   let accounts: Signer[];
   let nftContract: Contract;
@@ -31,12 +33,24 @@ describe("PizzaNFT", function () {
       "PizzaToken"
     );
 
+    const BallotContract: ContractFactory = await ethers.getContractFactory(
+      "PizzaBallot"
+    );
 
+    let proposalsbytes32: any[] = []
+    let translatedArray: any[]
+    PROPOSALS.forEach(function(text) {
+      proposalsbytes32.push(ethers.utils.formatBytes32String(text))
+    })
 
     nftContract = await PizzaContract.deploy();
+
     await nftContract.deployed();
+    
     let currencyAddr = await nftContract.getTokenAddress();
     currencyContract = await ethers.getContractAt("PizzaCoin", currencyAddr);
+    ballotContract = await BallotContract.deploy(proposalsbytes32, currencyAddr);
+    await ballotContract.deployed();
   });
 
   it("Should be able to mint new tokens", async function () {
@@ -81,4 +95,31 @@ describe("PizzaNFT", function () {
     expect(nftContract.connect(accounts[2]).transferFrom(accounts[1].getAddress(), accounts[0].getAddress(), 0)).to.be.revertedWith('ERC721: transfer caller is not owner nor approved')
   });
 
+  it("Should allow user to vote on proposals after receiving rights", async function () {
+    await nftContract.safeMint(accounts[1].getAddress(), b64Pizza);
+    expect(await ballotContract.connect(accounts[1]).vote(1)).to.be.ok
+  });
+
+  it("Should not allow user to vote on proposals without receiving rights to vote", async function () {
+    expect(ballotContract.connect(accounts[1]).vote(1)).to.be.revertedWith("Has no right to vote")
+  });
+
+  it("Should allow user to delegate voting rights", async function () {
+    await nftContract.safeMint(accounts[1].getAddress(), b64Pizza);
+    await currencyContract.connect(accounts[1]).approve(ballotContract.address, 1);
+    await ballotContract.connect(accounts[1]).delegate(accounts[2].getAddress());
+    expect(await ballotContract.connect(accounts[2]).vote(1)).to.be.ok 
+  });
+
+  it("Should not allow user to delegate voting rights after voting", async function () {
+    await nftContract.safeMint(accounts[1].getAddress(), b64Pizza);
+    await ballotContract.connect(accounts[1]).vote(1)
+    expect(ballotContract.connect(accounts[1]).delegate(accounts[2].getAddress())).to.be.revertedWith("You already voted.")
+  });
+
+    it("Should get winner after voting", async function () {
+    await nftContract.safeMint(accounts[1].getAddress(), b64Pizza);
+    await ballotContract.connect(accounts[1]).vote(0)
+    expect(ethers.utils.parseBytes32String(await ballotContract.winnerName())).to.equal(PROPOSALS[0])
+  });
 });

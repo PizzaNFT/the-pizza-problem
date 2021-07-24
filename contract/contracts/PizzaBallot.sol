@@ -9,7 +9,7 @@ import "./PizzaCoin.sol";
 contract PizzaBallot is AccessControl {
     bytes32 public constant CHAIRPERSON_ROLE = keccak256("CHAIRPERSON_ROLE");
 
-    address PizzaCoin;
+    address pizzaCoinAddress;
 //    uint256 start_voting = 1621616896;
 //    uint256 end_voting = 1621636896;
     address public owner;
@@ -32,7 +32,7 @@ contract PizzaBallot is AccessControl {
     constructor(bytes32[] memory proposalNames, address _PizzaCoin) 
     {
         owner = msg.sender;
-        PizzaCoin = _PizzaCoin;
+        pizzaCoinAddress = _PizzaCoin;
         //ProposalFactoryAddress = factory;
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(CHAIRPERSON_ROLE, msg.sender);
@@ -46,27 +46,21 @@ contract PizzaBallot is AccessControl {
     }
 
     function totalSupply() public view returns(uint256){
-        return IPizzaCoin(PizzaCoin).totalSupply();
+        return IPizzaCoin(pizzaCoinAddress).totalSupply();
     }
 
-    function transferERC20(address recipient, uint256 amount) public returns(bool) {
-       return IPizzaCoin(PizzaCoin).transfer(recipient, amount);
+    function transferERC20(address sender, address recipient, uint256 amount) public returns(bool) {
+       return IPizzaCoin(pizzaCoinAddress).transferFrom(sender, recipient, amount);
     }
     
     function balanceOfTokenBallot(address account) public view returns(uint256) {
-        return IPizzaCoin(PizzaCoin).balanceOf(account);
+        return IPizzaCoin(pizzaCoinAddress).balanceOf(account);
     }
 
     function grantChairPersonRole(address account) public onlyRole(CHAIRPERSON_ROLE) { 
         grantRole(CHAIRPERSON_ROLE, account);
     }
  
-    function giveRightToVote(address voter) public onlyRole(CHAIRPERSON_ROLE) {
-        require(hasRole(CHAIRPERSON_ROLE, msg.sender), "Only chairperson can give right to vote.");
-        require(!voters[voter].voted, "The voter already voted.");
-        require(balanceOfTokenBallot(voter) == 0);
-        transferERC20(voter, 1);
-    }
 
     function delegate(address to) public {
         Voter storage sender = voters[msg.sender];
@@ -84,8 +78,7 @@ contract PizzaBallot is AccessControl {
         if (delegate_.voted) {
             proposals[delegate_.vote].voteCount += balanceOfTokenBallot(msg.sender);
         } else {
-            transferERC20(to, balanceOfTokenBallot(msg.sender));
-            //burnERC20(msg.sender, balanceOfTokenBallot(msg.sender));
+            transferERC20(msg.sender,to, balanceOfTokenBallot(msg.sender));
         }
     }
 
