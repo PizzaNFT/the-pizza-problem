@@ -2,9 +2,8 @@ import { ethers } from "hardhat";
 import { Contract, ContractFactory, Signer } from "ethers";
 import { expect } from "chai";
 
-
-const pizzaObj = 
-  {
+const pizzaObj =
+{
   "dough": "thin",
   "topping": [
     "pepperoni",
@@ -16,16 +15,14 @@ const pizzaObj =
   ]
 };
 
-
-describe("PizzaNFT", function() {
+describe("PizzaNFT", function () {
   let accounts: Signer[];
   let nftContract: Contract;
   let currencyContract: Contract;
   let ballotContract: Contract;
   let ownerAddress: String;
-  let b64Pizza = btoa(JSON.stringify(pizzaObj));
-  let baseURI = "https://pizzatoken.pizza/";
-
+  let b64Pizza = Buffer.from(JSON.stringify(pizzaObj)).toString('base64')
+  let baseURI = "https://pizzatoken.pizza/"
 
   beforeEach(async function () {
     accounts = await ethers.getSigners();
@@ -61,9 +58,9 @@ describe("PizzaNFT", function() {
   });
 
   it("Should decode to a valid pizza object", async function () {
-    await nftContract.safeMint(accounts[1].getAddress(), b64Pizza);
-    let TokenURI : string = await nftContract.tokenURI(0);
-    expect(atob(TokenURI.replace(baseURI, ''))).to.be.equal(JSON.stringify(pizzaObj));
+    await contract.safeMint(accounts[1].getAddress(), b64Pizza);
+    let TokenURI: string = await contract.tokenURI(0);
+    expect(Buffer.from(TokenURI.replace(baseURI, ''), 'base64').toString()).to.be.equal(JSON.stringify(pizzaObj));
   });
 
   it("Should return the owner of a token", async function () {
@@ -73,16 +70,15 @@ describe("PizzaNFT", function() {
   });
 
   it("Should not return a burned token", async function () {
-    await nftContract.safeMint(accounts[1].getAddress(), b64Pizza);
-    await nftContract.connect(accounts[1]).approve(ownerAddress, 0);
-    await nftContract.burn(0);
-    expect(nftContract.ownerOf(0)).to.be.revertedWith("ERC721: owner query for nonexistent token");
+    await contract.safeMint(accounts[1].getAddress(), b64Pizza);
+    await contract.connect(accounts[1]).approve(ownerAddress, 0);
+    await contract.burn(0);
+    expect(contract.ownerOf(0)).to.be.revertedWith("ERC721: owner query for nonexistent token");
   });
 
   it("Should not allow transfer from unnaproved sender", async function () {
-    await nftContract.safeMint(accounts[1].getAddress(), b64Pizza);
-    expect(nftContract.connect(accounts[2]).transferFrom(accounts[1].getAddress(),accounts[0].getAddress(), 0)).to.be.revertedWith('ERC721: transfer caller is not owner nor approved')
-
+    await contract.safeMint(accounts[1].getAddress(), b64Pizza);
+    expect(contract.connect(accounts[2]).transferFrom(accounts[1].getAddress(), accounts[0].getAddress(), 0)).to.be.revertedWith('ERC721: transfer caller is not owner nor approved')
   });
 
 });
