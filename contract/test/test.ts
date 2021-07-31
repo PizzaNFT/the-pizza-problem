@@ -46,10 +46,10 @@ describe("PizzaNFT", function () {
     nftContract = await PizzaContract.deploy();
 
     await nftContract.deployed();
-    
+
     let currencyAddr = await nftContract.getTokenAddress();
     currencyContract = await ethers.getContractAt("PizzaCoin", currencyAddr);
-    ballotContract = await BallotContract.deploy(proposalsbytes32, currencyAddr);
+    ballotContract = await BallotContract.deploy(proposalsbytes32, currencyAddr, 2);
     await ballotContract.deployed();
   });
 
@@ -68,7 +68,6 @@ describe("PizzaNFT", function () {
     await nftContract.connect(accounts[1]).approve(ownerAddress, 0);
     expect(await nftContract.burn(0)).to.be.ok;
     expect(await nftContract.balanceOf(accounts[1].getAddress())).to.be.equal(0);
-
   });
 
   it("Should decode to a valid pizza object", async function () {
@@ -117,7 +116,7 @@ describe("PizzaNFT", function () {
     await nftContract.safeMint(accounts[1].getAddress(), b64Pizza);
     await currencyContract.connect(accounts[1]).approve(ballotContract.address, 1);
     await ballotContract.connect(accounts[1]).vote(1)
-    expect(ballotContract.connect(accounts[1]).delegate(accounts[2].getAddress())).to.be.revertedWith("You already voted.")
+    expect(ballotContract.connect(accounts[1]).delegate(accounts[2].getAddress())).to.be.revertedWith("Has no token to delegate")
   });
 
     it("Should get winner after voting", async function () {
