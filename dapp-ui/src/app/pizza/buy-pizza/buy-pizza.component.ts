@@ -30,7 +30,7 @@ export class BuyPizzaComponent implements OnInit {
       alert("Senha inválida.")
       return
     }
-    const signer = await this.globalService.getSigner(wallet)
+    const signer = await this.globalService.getSigner().toPromise()
     console.log(signer)
     this.pizzaTokenService.buyPizza(this.dough, this.topping, this.extra, signer)
 

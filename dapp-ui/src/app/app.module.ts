@@ -24,6 +24,7 @@ import { BuyPizzaComponent } from './pizza/buy-pizza/buy-pizza.component';
 import { GlobalService } from './services/global.service';
 import { PizzaTokenService } from './services/pizzaToken.service';
 import { WalletService } from './services/wallet.service';
+import { SigninComponent } from './account/signin/signin.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { WalletService } from './services/wallet.service';
     CreateVotingComponent,
     VoteComponent,
     CreateAccountComponent,
-    BuyPizzaComponent
+    BuyPizzaComponent,
+    SigninComponent
   ],
   imports: [
     BrowserModule,
