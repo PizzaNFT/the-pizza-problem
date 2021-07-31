@@ -9,9 +9,9 @@ import "./PizzaCoin.sol";
 contract PizzaBallot is AccessControl {
     bytes32 public constant CHAIRPERSON_ROLE = keccak256("CHAIRPERSON_ROLE");
 
+    uint256 start_voting = 1627755815;
+    uint256 end_voting = 1627955815;
     address pizzaCoinAddress;
-//    uint256 start_voting = 1621616896;
-//    uint256 end_voting = 1621636896;
     address public owner;
 
     struct Voter {
@@ -29,7 +29,7 @@ contract PizzaBallot is AccessControl {
 
     Proposal[] public proposals;
 
-    constructor(bytes32[] memory proposalNames, address _PizzaCoin) 
+    constructor(bytes32[] memory proposalNames, address _PizzaCoin)
     {
         owner = msg.sender;
         pizzaCoinAddress = _PizzaCoin;
@@ -63,13 +63,14 @@ contract PizzaBallot is AccessControl {
 
     function delegate(address to) public {
         Voter storage sender = voters[msg.sender];
-        require(!sender.voted, "You already voted.");
+        //require(!sender.voted, "You already voted.");//desativado pq a pessoa pode receber novos saldos e votar/nao votar e guardar prum proximo mes
         require(to != msg.sender, "Self-delegation is disallowed.");
 
         while (voters[to].delegate != address(0)) {
             to = voters[to].delegate;
             require(to != msg.sender, "Found loop in delegation.");
         }
+        require(balanceOfTokenBallot(msg.sender) != 0, "Has no token to delegate");
         sender.voted = true;
         sender.delegate = to;
         Voter storage delegate_ = voters[to];
@@ -82,10 +83,10 @@ contract PizzaBallot is AccessControl {
     }
 
     function vote(uint proposal) public {
-//        require(block.timestamp >= start_voting, "The vote didn't start yet to vote");
+        require(block.timestamp >= start_voting, "The vote didn't start yet to vote");
         Voter storage sender = voters[msg.sender];
         require(balanceOfTokenBallot(msg.sender) != 0, "Has no right to vote");
-        // require(!sender.voted, "Already voted."); //desativado pq a pessoa pode receber novos saldos e votar/nao votar e guardar prum proximo mes
+        //require(!sender.voted, "Already voted."); //desativado pq a pessoa pode receber novos saldos e votar/nao votar e guardar prum proximo mes
         sender.voted = true;
         sender.vote = proposal;
 
@@ -97,7 +98,7 @@ contract PizzaBallot is AccessControl {
 
     function winningProposal() public view returns (uint winningProposal_)
     {
-//        require(block.timestamp <= end_voting, "The vote didn't finish yet to return a winner");
+        require(block.timestamp <= end_voting, "The vote didn't finish yet to return a winner");
         uint winningVoteCount = 0;
         for (uint p = 0; p < proposals.length; p++) {
             if (proposals[p].voteCount > winningVoteCount) {
@@ -110,7 +111,7 @@ contract PizzaBallot is AccessControl {
     function winnerName() public view
             returns (bytes32 winnerName_)
     {
-//        require(block.timestamp <= end_voting, "The vote didn't finish yet to return a winner");
+        require(block.timestamp <= end_voting, "The vote didn't finish yet to return a winner");
         winnerName_ = proposals[winningProposal()].name;
     }
 }
