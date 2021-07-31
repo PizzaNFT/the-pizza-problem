@@ -37,7 +37,7 @@ contract PizzaBallot is AccessControl {
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(CHAIRPERSON_ROLE, msg.sender);
         start_voting = block.timestamp;
-        endVoteTimestamp = 3600 * _endVoteDays;
+        endVoteTimestamp = 1 days * _endVoteDays;
         end_voting = start_voting + endVoteTimestamp;
 
         for (uint i = 0; i < proposalNames.length; i++) {
@@ -95,12 +95,10 @@ contract PizzaBallot is AccessControl {
         Voter storage sender = voters[msg.sender];
         require(balanceOfTokenBallot(msg.sender) != 0, "Has no right to vote");
         // require(!sender.voted, "Already voted."); //desativado pq a pessoa pode receber novos saldos e votar/nao votar e guardar prum proximo mes
+        transferERC20(msg.sender, address(this), balanceOfTokenBallot(msg.sender));
         sender.voted = true;
         sender.vote = proposal;
-
         proposals[proposal].voteCount += balanceOfTokenBallot(msg.sender);
-        transferERC20(msg.sender, address(this), balanceOfTokenBallot(msg.sender));
-
     }
 
 
