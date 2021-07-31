@@ -30,14 +30,14 @@ contract PizzaBallot is AccessControl {
 
     Proposal[] public proposals;
 
-    constructor(bytes32[] memory proposalNames, address _PizzaCoin, uint8 endVoteDays)
+    constructor(bytes32[] memory proposalNames, address _PizzaCoin, uint8 _endVoteDays)
     {
         owner = msg.sender;
         pizzaCoinAddress = _PizzaCoin;
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(CHAIRPERSON_ROLE, msg.sender);
         start_voting = block.timestamp;
-        endVoteTimestamp = 3600 * endVoteDays;
+        endVoteTimestamp = 3600 * _endVoteDays;
         end_voting = start_voting + endVoteTimestamp;
 
         for (uint i = 0; i < proposalNames.length; i++) {
