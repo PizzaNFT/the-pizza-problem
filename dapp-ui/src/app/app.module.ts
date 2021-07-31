@@ -28,6 +28,7 @@ import { WalletService } from './services/wallet.service';
 import { SigninComponent } from './account/signin/signin.component';
 import { PizzaBallotService } from './services/pizzaBallot.service';
 import { AuthGuard } from './services/auth-guard.service';
+import { PizzaCoinService } from './services/pizzaCoin.service';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { AuthGuard } from './services/auth-guard.service';
     WalletService,
     PizzaTokenService,
     PizzaBallotService,
+    PizzaCoinService,
     AuthGuard,
 
   ],

@@ -1,40 +1,54 @@
 import { Injectable } from '@angular/core';
 import { ethers } from "ethers";
-import PizzaToken from 'src/assets/pizzaToken.json'
+import PizzaBallot from 'src/assets/PizzaBallot.json'
 import { GlobalService } from './global.service';
+import { PizzaCoinService } from './pizzaCoin.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PizzaBallotService {
   provider: ethers.providers.Provider
-  erc721Address: string
+  ballotAddress: string
   contract: ethers.Contract
 
-  constructor(private globalService: GlobalService) {
+  constructor(private globalService: GlobalService, private pizzaCoinService: PizzaCoinService) {
     this.provider = ethers.getDefaultProvider("ropsten", {})
-    this.erc721Address = "0x62f997457064bdB83AbD2cFC7f01202A60F12E38"
-    this.contract = new ethers.Contract(this.erc721Address, PizzaToken.abi, this.provider)
+    this.ballotAddress = "0x4660a1192d6D667aC02fC4E065e79281D23291Bc"
+    this.contract = new ethers.Contract(this.ballotAddress, PizzaBallot.abi, this.provider)
+    // this.contract.on("Transfer", (to, amount, from) => {
+    //   console.log(to, amount, from);
+    // })
   }
 
   async listProposals() {
     console.log("Before")
-    const signer = await this.globalService.getSigner().toPromise() as ethers.Signer
+    const signer = await this.globalService.getSigner().value as ethers.Signer
     console.log("Signer:", signer)
 
-    this.contract = await this.contract.connect(signer)
+    const contract = await this.contract.connect(signer)
     try {
-      const data = await this.contract.proposals()
-      console.log('data: ', data)
+      const proposals = await Promise.all([
+        contract.proposals(0),
+        contract.proposals(1),
+        contract.proposals(2),
+      ])
+      console.log('proposals: ', proposals)
+      return proposals.map(prop => {
+        return ethers.utils.parseBytes32String(prop.name)
+      })
     } catch (err) {
       console.log("Error: ", err)
+      return []
     }
   }
 
-  async vote(signer: ethers.Signer) {
-    this.contract = await this.contract.connect(signer)
+  async vote(index: number) {
+    const signer = await this.globalService.getSigner().value as ethers.Signer
+    const contract = await this.contract.connect(signer)
     try {
-      const data = await this.contract.vote(1)
+      await this.pizzaCoinService.approve(this.ballotAddress, ethers.constants.MaxUint256)
+      const data = await contract.vote(ethers.BigNumber.from(index))
       console.log('data: ', data)
     } catch (err) {
       console.log("Error: ", err)

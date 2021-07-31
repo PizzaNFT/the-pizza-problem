@@ -22,7 +22,6 @@ export class BuyPizzaComponent implements OnInit {
 
   async buyPizza() {
     this.pizzaTokenService.buyPizza(this.dough, this.topping, this.extra)
-
   }
 
 }

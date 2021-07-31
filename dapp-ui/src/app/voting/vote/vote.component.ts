@@ -10,15 +10,15 @@ export class VoteComponent implements OnInit {
 
   constructor(private pizzaBallotService: PizzaBallotService) { }
 
-  proposals: string[] = ["pizza 1", "pizza 2"]
+  proposals: string[]
   selectedItem: string = ""
 
-  ngOnInit(): void {
-    this.pizzaBallotService.listProposals()
-    this.proposals = ["pizza 1", "pizza 2"]
+  async ngOnInit(): Promise<void> {
+    this.proposals = await this.pizzaBallotService.listProposals()
   }
 
   vote() {
     console.log(this.selectedItem[0])
+    this.pizzaBallotService.vote(parseInt(this.selectedItem[0]))
   }
 }
