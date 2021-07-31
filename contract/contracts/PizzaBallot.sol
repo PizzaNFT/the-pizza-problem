@@ -9,8 +9,9 @@ import "./PizzaCoin.sol";
 contract PizzaBallot is AccessControl {
     bytes32 public constant CHAIRPERSON_ROLE = keccak256("CHAIRPERSON_ROLE");
 
-    uint256 start_voting = 1627755815;
-    uint256 end_voting = 1627955815;
+    uint256 start_voting;
+    uint256 end_voting;
+    uint256 endVoteTimestamp;
     address pizzaCoinAddress;
     address public owner;
 
@@ -68,12 +69,11 @@ contract PizzaBallot is AccessControl {
         Voter storage sender = voters[msg.sender];
         //require(!sender.voted, "You already voted.");//desativado pq a pessoa pode receber novos saldos e votar/nao votar e guardar prum proximo mes
         require(to != msg.sender, "Self-delegation is disallowed.");
-
+        require(balanceOfTokenBallot(msg.sender) != 0, "Has no token to delegate");
         while (voters[to].delegate != address(0)) {
             to = voters[to].delegate;
             require(to != msg.sender, "Found loop in delegation.");
         }
-        require(balanceOfTokenBallot(msg.sender) != 0, "Has no token to delegate");
         sender.voted = true;
         sender.delegate = to;
         Voter storage delegate_ = voters[to];
