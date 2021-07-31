@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ethers } from "ethers";
-import PizzaToken from 'src/assets/pizzaToken.json'
+import PizzaCoin from 'src/assets/PizzaCoin.json'
 import { GlobalService } from './global.service';
 
 @Injectable({
@@ -14,7 +14,7 @@ export class PizzaCoinService {
   constructor(private globalService: GlobalService) {
     this.provider = ethers.getDefaultProvider("ropsten", {})
     this.erc721Address = "0x64ec11DdC3df305d7C00FE14B11F49C91c0A999c"
-    this.contract = new ethers.Contract(this.erc721Address, PizzaToken.abi, this.provider)
+    this.contract = new ethers.Contract(this.erc721Address, PizzaCoin.abi, this.provider)
   }
 
   async approve(spenderAddress: string, amount: ethers.BigNumber) {

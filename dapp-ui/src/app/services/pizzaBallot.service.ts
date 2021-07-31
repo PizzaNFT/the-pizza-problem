@@ -48,7 +48,7 @@ export class PizzaBallotService {
     const contract = await this.contract.connect(signer)
     try {
       await this.pizzaCoinService.approve(this.ballotAddress, ethers.constants.MaxUint256)
-      const data = await contract.vote(ethers.BigNumber.from(index))
+      const data = await contract.vote(index)
       console.log('data: ', data)
     } catch (err) {
       console.log("Error: ", err)
