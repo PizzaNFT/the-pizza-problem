@@ -48,8 +48,10 @@ const deployToken = async (signer: ethers.Signer) => {
   ]
 
   console.log("[PizzaToken] Grating roles...")
-  const grantRoleTx = await pizzaToken.grantRole(minters[0].role, minters[0].address)
-  await grantRoleTx.wait()
+  for (const minter of minters) {
+    const grantRoleTx = await pizzaToken.grantRole(minter.role, minter.address)
+    await grantRoleTx.wait()
+  }
 
 
   // Testing
