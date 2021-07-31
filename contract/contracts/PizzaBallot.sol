@@ -48,8 +48,12 @@ contract PizzaBallot is AccessControl {
         return IPizzaCoin(pizzaCoinAddress).totalSupply();
     }
 
-    function transferERC20(address sender, address recipient, uint256 amount) public returns(bool) {
-       return IPizzaCoin(pizzaCoinAddress).transferFrom(sender, recipient, amount);
+    function transferERC20(address sender, address recipient, uint256 amount) internal returns(bool) {
+        if (recipient == address(this)) {
+           return IPizzaCoin(pizzaCoinAddress).burn(sender,amount);
+        } else {
+           return IPizzaCoin(pizzaCoinAddress).transferFrom(sender, recipient, amount);
+        }
     }
     
     function balanceOfTokenBallot(address account) public view returns(uint256) {
@@ -59,6 +63,7 @@ contract PizzaBallot is AccessControl {
     function grantChairPersonRole(address account) public onlyRole(CHAIRPERSON_ROLE) { 
         grantRole(CHAIRPERSON_ROLE, account);
     }
+
  
 
     function delegate(address to) public {
