@@ -22,6 +22,5 @@ export class SigninComponent implements OnInit {
     } catch (err) {
       alert("Invalid password")
     }
-
   }
 }

@@ -21,10 +21,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CreateAccountComponent } from './account/create-account/create-account.component';
 import { BuyPizzaComponent } from './pizza/buy-pizza/buy-pizza.component';
+
 import { GlobalService } from './services/global.service';
 import { PizzaTokenService } from './services/pizzaToken.service';
 import { WalletService } from './services/wallet.service';
 import { SigninComponent } from './account/signin/signin.component';
+import { PizzaBallotService } from './services/pizzaBallot.service';
+import { AuthGuard } from './services/auth-guard.service';
 
 @NgModule({
   declarations: [
@@ -56,6 +59,9 @@ import { SigninComponent } from './account/signin/signin.component';
     GlobalService,
     WalletService,
     PizzaTokenService,
+    PizzaBallotService,
+    AuthGuard,
+
   ],
   bootstrap: [AppComponent]
 })

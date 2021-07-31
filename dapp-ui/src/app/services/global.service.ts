@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ethers } from "ethers";
-import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,11 +8,11 @@ import { BehaviorSubject, ReplaySubject, Subject } from 'rxjs';
 export class GlobalService {
 
   provider: ethers.providers.Provider
-  signer: Subject<ethers.Signer>
+  signer: BehaviorSubject<ethers.Signer | null>
 
   constructor() {
     this.provider = ethers.getDefaultProvider("ropsten", {})
-    this.signer = new ReplaySubject<ethers.Signer>()
+    this.signer = new BehaviorSubject<ethers.Signer | null>(null)
   }
 
   signin(wallet: ethers.Wallet) {

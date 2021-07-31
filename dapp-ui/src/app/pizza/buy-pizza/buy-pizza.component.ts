@@ -14,7 +14,6 @@ export class BuyPizzaComponent implements OnInit {
   dough: string = ""
   topping: string = ""
   extra: string = ""
-  password: string = ""
 
   constructor(private globalService: GlobalService, private pizzaTokenService: PizzaTokenService, private walletService: WalletService) { }
 
@@ -22,17 +21,7 @@ export class BuyPizzaComponent implements OnInit {
   }
 
   async buyPizza() {
-    let wallet: ethers.Wallet;
-    try {
-      wallet = await this.walletService.getDecryptedWallet(this.password)
-    } catch (err) {
-      console.log(err)
-      alert("Senha inválida.")
-      return
-    }
-    const signer = await this.globalService.getSigner().toPromise()
-    console.log(signer)
-    this.pizzaTokenService.buyPizza(this.dough, this.topping, this.extra, signer)
+    this.pizzaTokenService.buyPizza(this.dough, this.topping, this.extra)
 
   }
 
