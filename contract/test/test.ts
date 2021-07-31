@@ -109,7 +109,7 @@ describe("PizzaNFT", function () {
     await currencyContract.connect(accounts[1]).approve(ballotContract.address, 1);
     await ballotContract.connect(accounts[1]).delegate(accounts[2].getAddress());
     await currencyContract.connect(accounts[2]).approve(ballotContract.address, 1);
-    expect(await ballotContract.connect(accounts[2]).vote(1)).to.be.ok
+    expect(await ballotContract.connect(accounts[2]).vote(1)).to.be.ok 
   });
 
   it("Should not allow user to delegate voting rights after voting", async function () {

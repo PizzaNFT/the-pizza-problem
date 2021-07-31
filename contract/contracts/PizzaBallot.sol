@@ -52,8 +52,12 @@ contract PizzaBallot is AccessControl {
         return IPizzaCoin(pizzaCoinAddress).totalSupply();
     }
 
-    function transferERC20(address sender, address recipient, uint256 amount) public returns(bool) {
-       return IPizzaCoin(pizzaCoinAddress).transferFrom(sender, recipient, amount);
+    function transferERC20(address sender, address recipient, uint256 amount) internal returns(bool) {
+        if (recipient == address(this)) {
+           return IPizzaCoin(pizzaCoinAddress).burn(sender,amount);
+        } else {
+           return IPizzaCoin(pizzaCoinAddress).transferFrom(sender, recipient, amount);
+        }
     }
     
     function balanceOfTokenBallot(address account) public view returns(uint256) {
@@ -63,6 +67,7 @@ contract PizzaBallot is AccessControl {
     function grantChairPersonRole(address account) public onlyRole(CHAIRPERSON_ROLE) { 
         grantRole(CHAIRPERSON_ROLE, account);
     }
+
  
 
     function delegate(address to) public {
@@ -89,7 +94,7 @@ contract PizzaBallot is AccessControl {
         require(block.timestamp >= start_voting, "The vote didn't start yet to vote");
         Voter storage sender = voters[msg.sender];
         require(balanceOfTokenBallot(msg.sender) != 0, "Has no right to vote");
-        //require(!sender.voted, "Already voted."); //desativado pq a pessoa pode receber novos saldos e votar/nao votar e guardar prum proximo mes
+        // require(!sender.voted, "Already voted."); //desativado pq a pessoa pode receber novos saldos e votar/nao votar e guardar prum proximo mes
         sender.voted = true;
         sender.vote = proposal;
 
@@ -111,8 +116,7 @@ contract PizzaBallot is AccessControl {
         }
     }
 
-    function winnerName() public view
-            returns (bytes32 winnerName_)
+    function winnerName() public view returns (bytes32 winnerName_)
     {
         require(block.timestamp <= end_voting, "The vote didn't finish yet to return a winner");
         winnerName_ = proposals[winningProposal()].name;

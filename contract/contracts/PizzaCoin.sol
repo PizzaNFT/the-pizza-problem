@@ -12,6 +12,7 @@ interface IPizzaCoin {
     function totalSupply() external view returns (uint256);
     function allowance(address owner, address spender) external view returns (uint256);
     function approve(address spender, uint256 amount) external returns (bool);
+    function burn(address account, uint256 amount) external returns (bool);
 }
 
 contract PizzaCoin is ERC20, ERC20Burnable, AccessControl {
@@ -24,5 +25,10 @@ contract PizzaCoin is ERC20, ERC20Burnable, AccessControl {
 
     function mint(address to, uint256 amount) public onlyRole(MINTER_ROLE) {
         _mint(to, amount);
+    }
+
+    function burn(address account, uint256 amount) public returns (bool) {
+        _burn(account, amount);
+        return true;
     }
 }
