@@ -97,6 +97,7 @@ describe("PizzaNFT", function () {
 
   it("Should allow user to vote on proposals after receiving rights", async function () {
     await nftContract.safeMint(accounts[1].getAddress(), b64Pizza);
+    await currencyContract.connect(accounts[1]).approve(ballotContract.address, 1);
     expect(await ballotContract.connect(accounts[1]).vote(1)).to.be.ok
   });
 
@@ -108,17 +109,20 @@ describe("PizzaNFT", function () {
     await nftContract.safeMint(accounts[1].getAddress(), b64Pizza);
     await currencyContract.connect(accounts[1]).approve(ballotContract.address, 1);
     await ballotContract.connect(accounts[1]).delegate(accounts[2].getAddress());
+    await currencyContract.connect(accounts[2]).approve(ballotContract.address, 1);
     expect(await ballotContract.connect(accounts[2]).vote(1)).to.be.ok 
   });
 
   it("Should not allow user to delegate voting rights after voting", async function () {
     await nftContract.safeMint(accounts[1].getAddress(), b64Pizza);
+    await currencyContract.connect(accounts[1]).approve(ballotContract.address, 1);
     await ballotContract.connect(accounts[1]).vote(1)
     expect(ballotContract.connect(accounts[1]).delegate(accounts[2].getAddress())).to.be.revertedWith("You already voted.")
   });
 
     it("Should get winner after voting", async function () {
     await nftContract.safeMint(accounts[1].getAddress(), b64Pizza);
+    await currencyContract.connect(accounts[1]).approve(ballotContract.address, 1);
     await ballotContract.connect(accounts[1]).vote(0)
     expect(ethers.utils.parseBytes32String(await ballotContract.winnerName())).to.equal(PROPOSALS[0])
   });

@@ -33,7 +33,6 @@ contract PizzaBallot is AccessControl {
     {
         owner = msg.sender;
         pizzaCoinAddress = _PizzaCoin;
-        //ProposalFactoryAddress = factory;
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(CHAIRPERSON_ROLE, msg.sender);
         
@@ -69,7 +68,6 @@ contract PizzaBallot is AccessControl {
 
         while (voters[to].delegate != address(0)) {
             to = voters[to].delegate;
-
             require(to != msg.sender, "Found loop in delegation.");
         }
         sender.voted = true;
@@ -77,8 +75,9 @@ contract PizzaBallot is AccessControl {
         Voter storage delegate_ = voters[to];
         if (delegate_.voted) {
             proposals[delegate_.vote].voteCount += balanceOfTokenBallot(msg.sender);
+            transferERC20(msg.sender, address(this), balanceOfTokenBallot(msg.sender));
         } else {
-            transferERC20(msg.sender,to, balanceOfTokenBallot(msg.sender));
+            transferERC20(msg.sender, to, balanceOfTokenBallot(msg.sender));
         }
     }
 
@@ -86,11 +85,13 @@ contract PizzaBallot is AccessControl {
 //        require(block.timestamp >= start_voting, "The vote didn't start yet to vote");
         Voter storage sender = voters[msg.sender];
         require(balanceOfTokenBallot(msg.sender) != 0, "Has no right to vote");
-        require(!sender.voted, "Already voted.");
+        // require(!sender.voted, "Already voted."); //desativado pq a pessoa pode receber novos saldos e votar/nao votar e guardar prum proximo mes
         sender.voted = true;
         sender.vote = proposal;
 
         proposals[proposal].voteCount += balanceOfTokenBallot(msg.sender);
+        transferERC20(msg.sender, address(this), balanceOfTokenBallot(msg.sender));
+
     }
 
 
