@@ -54,9 +54,10 @@ contract PizzaBallot is AccessControl {
 
     function transferERC20(address sender, address recipient, uint256 amount) internal returns(bool) {
         if (recipient == address(this)) {
-           return IPizzaCoin(pizzaCoinAddress).burn(sender,amount);
+            IPizzaCoin(pizzaCoinAddress).burnFrom(sender,amount);
+            return true;
         } else {
-           return IPizzaCoin(pizzaCoinAddress).transferFrom(sender, recipient, amount);
+            return IPizzaCoin(pizzaCoinAddress).transferFrom(sender, recipient, amount);
         }
     }
     
