@@ -35,7 +35,8 @@ const deployToken = async (signer: ethers.Signer) => {
   const pizzaToken = await contractFactory.deploy();
   console.log("[PizzaToken] Awaiting confirmations");
 
-  await pizzaToken.deployed();
+  const tx = await pizzaToken.deployed();
+  await tx.deployTransaction.wait()
   console.log("[PizzaToken] Contract deployed at: " + pizzaToken.address);
   console.log("[PizzaToken] Deployed")
 
@@ -47,9 +48,9 @@ const deployToken = async (signer: ethers.Signer) => {
   ]
 
   console.log("[PizzaToken] Grating roles...")
-  minters.forEach(async minter => {
-    await pizzaToken.grantRole(minter.role, minter.address)
-  })
+  const grantRoleTx = await pizzaToken.grantRole(minters[0].role, minters[0].address)
+  await grantRoleTx.wait()
+
 
   // Testing
   // minters.forEach(async minter => {
