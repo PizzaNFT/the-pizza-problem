@@ -12,13 +12,14 @@ export class VoteComponent implements OnInit {
 
   proposals: string[]
   selectedItem: string = ""
-
+  loading = false;
   async ngOnInit(): Promise<void> {
     this.proposals = await this.pizzaBallotService.listProposals()
   }
 
-  vote() {
-    console.log(this.selectedItem[0])
-    this.pizzaBallotService.vote(parseInt(this.selectedItem[0]))
+  async vote() {
+    this.loading = true;
+    await this.pizzaBallotService.vote(parseInt(this.selectedItem[0]))
+    this.loading = false;
   }
 }

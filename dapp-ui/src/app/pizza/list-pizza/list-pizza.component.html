@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="col-md-12">
+    <h1>My Pizzas</h1>
+    <mat-list>
+      <p *ngIf="loading">Loading...</p>
+      <mat-list-item *ngFor="let pizza of pizzas">
+        <img matListAvatar
+          src="https://img.itdg.com.br/tdg/images/recipes/000/000/324/323149/323149_original.jpg?w=1200">
+        <p matLine> <span> Dough: {{ pizza.dough }} </span> </p>
+        <p matLine> <span> Topping: {{ pizza.topping }} </span> </p>
+        <p matLine> <span> Extra: {{ pizza.extra }} </span> </p>
+      </mat-list-item>
+    </mat-list>
+  </div>
+</div>

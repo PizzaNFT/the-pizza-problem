@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ethers } from "ethers";
+import { BehaviorSubject } from 'rxjs';
 import PizzaToken from 'src/assets/pizzaToken.json'
 import { GlobalService } from './global.service';
 
@@ -10,11 +11,13 @@ export class PizzaTokenService {
   provider: ethers.providers.Provider
   erc721Address: string
   contract: ethers.Contract
+  balance: BehaviorSubject<string | number>
 
   constructor(private globalService: GlobalService) {
     this.provider = ethers.getDefaultProvider("ropsten", {})
-    this.erc721Address = "0x62f997457064bdB83AbD2cFC7f01202A60F12E38"
+    this.erc721Address = "0x87da0155ad6b9631f812CA35238C4eC0f08F89dC"
     this.contract = new ethers.Contract(this.erc721Address, PizzaToken.abi, this.provider)
+    this.balance = new BehaviorSubject<string | number>(0)
   }
 
   async buyPizza(dough: string, topping: string, extra: string) {
@@ -28,6 +31,47 @@ export class PizzaTokenService {
       console.log('data: ', data)
     } catch (err) {
       console.log("Error: ", err)
+    }
+  }
+
+  async listPizzas() {
+    const signer = await this.globalService.getSigner().value as ethers.Signer
+
+    const contract = await this.contract.connect(signer)
+    try {
+      const signerAddress = await signer.getAddress()
+      let balance = <ethers.BigNumber>(await contract.balanceOf(signerAddress))
+      console.log("Pizzas =", balance.toNumber())
+
+      const pizzas = []
+      for (let i = 0; i < balance.toNumber(); i++) {
+        const tokenId = await contract.tokenOfOwnerByIndex(signerAddress, i)
+        const tokenURI = <string>await contract.tokenURI(tokenId)
+        let description = atob(tokenURI.split("https://pizzatoken.pizza/")[1])
+        pizzas.push(JSON.parse(description))
+      }
+      return pizzas;
+      // const data = await contract.safeMint(await signer.getAddress())
+      // console.log('data: ', data)
+    } catch (err) {
+      console.log("Error: ", err)
+      return []
+    }
+  }
+
+  async updateBalance(): Promise<number> {
+    const signer = await this.globalService.getSigner().value as ethers.Signer
+
+    const contract = await this.contract.connect(signer)
+    try {
+      const signerAddress = await signer.getAddress()
+      let balance = <ethers.BigNumber>(await contract.balanceOf(signerAddress))
+      console.log("Pizzas =", balance.toNumber())
+      this.balance.next(balance.toNumber())
+      return balance.toNumber()
+    } catch (err) {
+      console.log("Error: ", err)
+      return 0
     }
   }
 

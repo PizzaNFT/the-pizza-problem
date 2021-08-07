@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ethers } from "ethers";
 import { BehaviorSubject, Observable, ReplaySubject, Subject } from 'rxjs';
+import { PizzaTokenService } from './pizzaToken.service';
 
 @Injectable({
   providedIn: 'root'

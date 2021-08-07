@@ -3,6 +3,7 @@ import { PizzaTokenService } from 'src/app/services/pizzaToken.service';
 import { GlobalService } from 'src/app/services/global.service';
 import { WalletService } from 'src/app/services/wallet.service';
 import { ethers } from 'ethers';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-buy-pizza',
@@ -14,14 +15,17 @@ export class BuyPizzaComponent implements OnInit {
   dough: string = ""
   topping: string = ""
   extra: string = ""
-
-  constructor(private globalService: GlobalService, private pizzaTokenService: PizzaTokenService, private walletService: WalletService) { }
+  loading = false;
+  constructor(private pizzaTokenService: PizzaTokenService, private router: Router) { }
 
   ngOnInit(): void {
   }
 
   async buyPizza() {
-    this.pizzaTokenService.buyPizza(this.dough, this.topping, this.extra)
+    this.loading = true
+    await this.pizzaTokenService.buyPizza(this.dough, this.topping, this.extra)
+    this.router.navigate(["/pizza/list"])
+
   }
 
 }

@@ -10,12 +10,15 @@
         Signin
       </a>
       <ng-container *ngIf="loggedIn">
-        <a mat-list-item routerLink="/create-voting">
-          Create Ballot
-        </a>
         <a mat-list-item routerLink="/pizza/buy">
           Buy Pizza
         </a>
+        <a mat-list-item routerLink="/pizza/list">
+          My Pizzas
+        </a>
+        <!-- <a mat-list-item routerLink="/create-voting">
+          Create Voting
+        </a> -->
         <a mat-list-item routerLink="/vote">
           Vote
         </a>
@@ -28,7 +31,16 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>dapp-ui</span>
+      <span>Pizza NFT</span>
+
+      <div class="ml-auto" style="float:right;">
+        <span>
+          My Pizzas: {{ tokenBalance }}
+        </span>
+        <span>
+          My Votes: {{ coinBalance }}
+        </span>
+      </div>
     </mat-toolbar>
     <div class="container">
       <router-outlet></router-outlet>
