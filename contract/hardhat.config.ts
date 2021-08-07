@@ -15,10 +15,8 @@ const ROPSTEN_PRIVATE_KEY = "";
  */
 module.exports = {
   solidity: "0.8.3",
+  defaultNetwork: "hardhat",
   networks: {
-    ropsten: {
-      url: `https://eth-ropsten.alchemyapi.io/v2/${ALCHEMY_API_KEY}`,
-      accounts: [`0x${ROPSTEN_PRIVATE_KEY}`],
-    },
+    hardhat: {},
   }
 };

@@ -22,4 +22,4 @@ jobs:
         run: cd contract && npm install
 
       - name: Run Tests on contract
-        run: cd contract && npx hardhat test
+        run: cd contract && npx hardhat test --network hardhat
