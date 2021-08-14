@@ -123,7 +123,7 @@ describe("PizzaNFT", function () {
     await nftContract.safeMint(accounts[1].getAddress(), b64Pizza);
     await currencyContract.connect(accounts[1]).approve(ballotContract.address, 1);
     await ballotContract.connect(accounts[1]).vote(0)
-    await ethers.provider.send("evm_increaseTime", [2 * 24 * 60 * 60]);
+    await ethers.provider.send("evm_increaseTime", [2 * 60]);
     await ethers.provider.send("evm_mine", []);
     expect(ethers.utils.parseBytes32String(await ballotContract.winnerName())).to.equal(PROPOSALS[0])
   });
