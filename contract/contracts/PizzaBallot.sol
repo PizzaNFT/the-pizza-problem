@@ -37,7 +37,7 @@ contract PizzaBallot is AccessControl {
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _setupRole(CHAIRPERSON_ROLE, msg.sender);
         start_voting = block.timestamp;
-        endVoteTimestamp = 1 days * _endVoteDays;
+        endVoteTimestamp = 1 seconds * _endVoteDays;
         end_voting = start_voting + endVoteTimestamp;
 
         for (uint i = 0; i < proposalNames.length; i++) {
