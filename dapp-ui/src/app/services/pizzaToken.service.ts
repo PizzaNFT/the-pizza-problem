@@ -15,7 +15,7 @@ export class PizzaTokenService {
 
   constructor(private globalService: GlobalService) {
     this.provider = ethers.getDefaultProvider("ropsten", {})
-    this.erc721Address = "0x87da0155ad6b9631f812CA35238C4eC0f08F89dC"
+    this.erc721Address = "0x5a4505F60cd106189FeD5C50c0aD8BeCEf9CDF92"
     this.contract = new ethers.Contract(this.erc721Address, PizzaToken.abi, this.provider)
     this.balance = new BehaviorSubject<string | number>(0)
   }
