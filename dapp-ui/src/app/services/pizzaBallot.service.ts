@@ -14,7 +14,7 @@ export class PizzaBallotService {
 
   constructor(private globalService: GlobalService, private pizzaCoinService: PizzaCoinService) {
     this.provider = ethers.getDefaultProvider("ropsten", {})
-    this.ballotAddress = "0x300FbFB9B00BBB2Ba3D0A64ed7f0ca04A29631c9"
+    this.ballotAddress = "0xCc4aA474c609c293EA00Bc1EdE072fc3Efd69f06"
     this.contract = new ethers.Contract(this.ballotAddress, PizzaBallot.abi, this.provider)
     // this.contract.on("Transfer", (to, amount, from) => {
     //   console.log(to, amount, from);

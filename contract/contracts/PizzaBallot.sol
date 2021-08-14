@@ -105,7 +105,7 @@ contract PizzaBallot is AccessControl {
 
     function winningProposal() public view returns (uint winningProposal_)
     {
-        require(block.timestamp <= end_voting, "The vote didn't finish yet to return a winner");
+        require(block.timestamp >= end_voting, "The vote didn't finish yet to return a winner");
         uint winningVoteCount = 0;
         for (uint p = 0; p < proposals.length; p++) {
             if (proposals[p].voteCount > winningVoteCount) {
@@ -117,7 +117,7 @@ contract PizzaBallot is AccessControl {
 
     function winnerName() public view returns (bytes32 winnerName_)
     {
-        require(block.timestamp <= end_voting, "The vote didn't finish yet to return a winner");
+        require(block.timestamp >= end_voting, "The vote didn't finish yet to return a winner");
         winnerName_ = proposals[winningProposal()].name;
     }
 }
