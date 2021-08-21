@@ -10,14 +10,14 @@ import { GlobalService } from './global.service';
 })
 export class PizzaCoinService {
   provider: ethers.providers.Provider
-  erc721Address: string
+  erc20Address: string
   contract: ethers.Contract
   balance: BehaviorSubject<string | number>
 
   constructor(private globalService: GlobalService) {
     this.provider = ethers.getDefaultProvider("ropsten", {})
-    this.erc721Address = "0x5fef713948F6b28161A93b64020004458ADadd10"
-    this.contract = new ethers.Contract(this.erc721Address, PizzaCoin.abi, this.provider)
+    this.erc20Address = "0x5fef713948F6b28161A93b64020004458ADadd10"
+    this.contract = new ethers.Contract(this.erc20Address, PizzaCoin.abi, this.provider)
     this.balance = new BehaviorSubject<string | number>(0)
   }
 

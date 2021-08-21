@@ -10,7 +10,9 @@
     </div>
 
     <div class="row">
-      <button class="mx-auto w-50" mat-raised-button color="primary" (click)="signin()">Signin</button>
+      <p class="w-100 mt-3" style="text-align: center;" *ngIf="loading">Signing in...</p>
+      <button class="mx-auto w-50" mat-raised-button color="primary" [disabled]="loading"
+        (click)="signin()">Signin</button>
     </div>
   </div>
 </div>

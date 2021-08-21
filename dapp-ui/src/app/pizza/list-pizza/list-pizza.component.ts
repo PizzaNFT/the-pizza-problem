@@ -13,6 +13,16 @@ export class ListPizzaComponent implements OnInit {
   constructor(private pizzaTokenService: PizzaTokenService) { }
 
   async ngOnInit(): Promise<void> {
+    this.pizzas = []
+    this.listPizzas();
+  }
+
+  async refresh() {
+    this.listPizzas()
+  }
+
+  async listPizzas() {
+    this.loading = true
     this.pizzas = await this.pizzaTokenService.listPizzas()
     this.loading = false
   }

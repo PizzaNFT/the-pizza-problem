@@ -1,6 +1,16 @@
 <div class="row">
   <div class="col-md-12">
     <h1>My Pizzas</h1>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <button class="float-right" mat-raised-button color="basic" (click)="refresh()">Refresh</button>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+
     <mat-list>
       <p *ngIf="loading">Loading...</p>
       <mat-list-item *ngFor="let pizza of pizzas">

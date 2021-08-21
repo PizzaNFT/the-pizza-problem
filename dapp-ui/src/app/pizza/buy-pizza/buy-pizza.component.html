@@ -25,7 +25,8 @@
 
     <div class="row">
       <p class="w-100 mt-3" style="text-align: center;" *ngIf="loading">Buying pizza...</p>
-      <button class="mx-auto w-50" mat-raised-button color="primary" (click)="buyPizza()">Buy Pizza</button>
+      <button class="mx-auto w-50" mat-raised-button color="primary" [disabled]="loading" (click)="buyPizza()">Buy
+        Pizza</button>
     </div>
   </div>
 </div>
