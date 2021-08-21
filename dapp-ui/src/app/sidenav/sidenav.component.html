@@ -27,21 +27,34 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar color="primary">
-      <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-      </button>
-      <span>Pizza NFT</span>
 
-      <div class="ml-auto" style="float:right;">
-        <span>
-          My Pizzas: {{ tokenBalance }}
-        </span>
-        <span>
-          My Votes: {{ coinBalance }}
-        </span>
-      </div>
+      <mat-toolbar-row>
+        <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
+          *ngIf="isHandset$ | async">
+          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
+        <span>Pizza NFT</span>
+
+      </mat-toolbar-row>
+
+      <mat-toolbar-row *ngIf="loggedIn">
+        <div class="mr-auto float-left">
+          Address: {{ address }}
+        </div>
+        <div class="ml-auto" style="float:right;">
+          <span>
+            ETH: {{ ethBalance }}
+          </span>
+          <span>
+            My Pizzas: {{ tokenBalance }}
+          </span>
+          <span>
+            My Votes: {{ coinBalance }}
+          </span>
+        </div>
+      </mat-toolbar-row>
     </mat-toolbar>
+
     <div class="container">
       <router-outlet></router-outlet>
     </div>

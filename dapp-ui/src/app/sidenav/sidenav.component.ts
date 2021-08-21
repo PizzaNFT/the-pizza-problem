@@ -5,6 +5,7 @@ import { map, shareReplay } from 'rxjs/operators';
 import { GlobalService } from '../services/global.service';
 import { PizzaTokenService } from '../services/pizzaToken.service';
 import { PizzaCoinService } from '../services/pizzaCoin.service';
+import { ethers } from 'ethers'
 
 @Component({
   selector: 'app-sidenav',
@@ -20,16 +21,21 @@ export class SidenavComponent implements OnInit {
     );
 
   loggedIn: boolean = false
+  ethBalance: string | number = "0"
   tokenBalance: string | number
   coinBalance: string | number
+  address: string
+
   constructor(private breakpointObserver: BreakpointObserver, private globalService: GlobalService, private pizzaTokenService: PizzaTokenService, private pizzaCoinService: PizzaCoinService) { }
 
-  ngOnInit() {
-    this.globalService.signer.subscribe(signer => {
+  async ngOnInit() {
+    this.globalService.signer.subscribe(async signer => {
       if (signer) {
         this.loggedIn = true
+        this.address = await signer.getAddress()
+        const balance = await signer.getBalance()
+        this.ethBalance = ethers.utils.formatEther(balance).substring(0, 8)
       }
-      console.log("The signer:", signer)
     })
 
     this.pizzaTokenService.balance.subscribe(balance => {
