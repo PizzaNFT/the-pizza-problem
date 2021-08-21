@@ -31,6 +31,7 @@ import { PizzaBallotService } from './services/pizzaBallot.service';
 import { AuthGuard } from './services/auth-guard.service';
 import { PizzaCoinService } from './services/pizzaCoin.service';
 import { ListPizzaComponent } from './pizza/list-pizza/list-pizza.component';
+import { VotingResultsComponent } from './voting/voting-results/voting-results.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { ListPizzaComponent } from './pizza/list-pizza/list-pizza.component';
     BuyPizzaComponent,
     SigninComponent,
     ListPizzaComponent,
+    VotingResultsComponent
   ],
   imports: [
     BrowserModule,

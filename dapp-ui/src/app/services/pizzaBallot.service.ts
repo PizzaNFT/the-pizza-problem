@@ -55,4 +55,15 @@ export class PizzaBallotService {
     }
   }
 
+  async getVotingResults() {
+    const signer = await this.globalService.getSigner().value as ethers.Signer
+    const contract = await this.contract.connect(signer)
+    try {
+      const data = await contract.proposals()
+      console.log('data: ', data)
+    } catch (err) {
+      console.log("Error: ", err)
+    }
+  }
+
 }

@@ -7,12 +7,14 @@ import { ListPizzaComponent } from './pizza/list-pizza/list-pizza.component';
 import { AuthGuard } from './services/auth-guard.service';
 import { CreateVotingComponent } from './voting/create-voting/create-voting.component';
 import { VoteComponent } from './voting/vote/vote.component';
+import { VotingResultsComponent } from './voting/voting-results/voting-results.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'signin', pathMatch: 'full' },
   { path: 'signin', component: SigninComponent },
   { path: 'create-voting', component: CreateVotingComponent, canActivate: [AuthGuard] },
   { path: 'create-account', component: CreateAccountComponent },
+  { path: 'voting-result', component: VotingResultsComponent },
   { path: 'vote', component: VoteComponent, canActivate: [AuthGuard] },
   {
     path: 'pizza', children: [
