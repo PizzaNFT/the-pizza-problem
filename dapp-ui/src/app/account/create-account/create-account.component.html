@@ -4,10 +4,9 @@
     <div class="row">
       <mat-form-field class="mx-auto w-50" appearance="outline">
         <mat-label>Mneumonic</mat-label>
-        <textarea matInput [(ngModel)]="mneumonic"></textarea>
+        <textarea matInput [(ngModel)]="mneumonic" id="GenMneumonic"></textarea>
       </mat-form-field>
     </div>
-
     <div class="row">
       <mat-form-field class="mx-auto w-50" appearance="outline">
         <mat-label>Password</mat-label>
@@ -15,8 +14,9 @@
       </mat-form-field>
     </div>
 
-    <div class="row">
-      <button class="mx-auto w-50" mat-raised-button color="primary" (click)="createAccount()">Create</button>
+    <div class="button">
+      <button class="create_btn" mat-raised-button color="primary" (click)="createAccount()">Create</button>
+      <button class="gen_btn" mat-stroked-button color="primary" (click)="generateMnemonic()">Generate Mnemonic</button>
     </div>
   </div>
 </div>
