@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WalletService } from 'src/app/services/wallet.service';
+import { ethers } from "ethers";
+import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-create-account',
@@ -8,8 +10,9 @@ import { WalletService } from 'src/app/services/wallet.service';
 })
 export class CreateAccountComponent implements OnInit {
 
-  mneumonic: string = ""
+  mneumonic: any = ""
   password: string = ""
+  GenMneumonic: FormControl;
   constructor(private walletService: WalletService) { }
 
   ngOnInit(): void {
@@ -21,4 +24,8 @@ export class CreateAccountComponent implements OnInit {
     alert("Carteira Criada")
   }
 
+  async generateMnemonic() {
+    const randomMnemonic = ethers.Wallet.createRandom().mnemonic;
+    console.log(randomMnemonic.phrase);
+  }
 }
